@@ -34,36 +34,39 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_server_sid
   }
 }
 
+##Website_configuration
+resource "aws_s3_bucket_website_configuration" "default" {
+  bucket = aws_s3_bucket.default_bucket.id
+
+  index_document {
+    suffix = var.index_document
+  }
+
+  error_document {
+    key = "error.html"
+  }
+
+}
+
 ##Default Bucket Policy
 data "aws_iam_policy_document" "iam_policy_default" {
   statement {
-    effect    = "Allow"
-    actions   = ["s3:*"]
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject"
+    ]
     resources = ["${aws_s3_bucket.default_bucket.arn}/*"]
     principals {
-      type        = "AWS"
-      identifiers = ["${var.iam_account_id}"]
-    }
-  }
-}
-
-
-##ALB Bucket Policy
-data "aws_elb_service_account" "main" {}
-
-data "aws_iam_policy_document" "iam_policy_alb_access_log" {
-  statement {
-    effect    = "Allow"
-    actions   = ["s3:PutObject"]
-    resources = ["${aws_s3_bucket.default_bucket.arn}/*"]
-    principals {
-      type        = "AWS"
-      identifiers = [data.aws_elb_service_account.main.arn]
+      type = "AWS"
+      identifiers = [
+        aws_cloudfront_origin_access_identity.iam_policy_default.iam_arn
+      ]
     }
   }
 }
 
 resource "aws_s3_bucket_policy" "bucket_policy_to_bucket_association" {
   bucket = aws_s3_bucket.default_bucket.id
-  policy = var.bucket_role == "alb-access-log" ? data.aws_iam_policy_document.iam_policy_alb_access_log.json : data.aws_iam_policy_document.iam_policy_default.json
+  policy = data.aws_iam_policy_document.iam_policy_default.json
 }

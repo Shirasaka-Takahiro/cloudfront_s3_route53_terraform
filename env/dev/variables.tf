@@ -22,7 +22,6 @@ variable "general_config" {
 ##Regions
 variable "regions" {
   default = {
-    tokyo    = "ap-northeast-1"
     virginia = "us-east-1"
   }
 }
@@ -46,6 +45,12 @@ variable "domain_name" {
 
 variable "sans" {
   description = "Subject alternative names for ACM"
+  type        = string
+}
+
+##S3
+variable "index_document" {
+  description = "Website index document"
   type        = string
 }
 

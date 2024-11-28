@@ -1,11 +1,3 @@
-##Provider for ap-northeast-1
-provider "aws" {
-  profile    = "terraform-user"
-  access_key = var.access_key
-  secret_key = var.secret_key
-  region     = "ap-northeast-1"
-}
-
 ##Provider for us-east-1
 provider "aws" {
   profile    = "terraform-user"
@@ -16,12 +8,11 @@ provider "aws" {
 }
 
 ##S3
-module "s3_alb_access_log" {
+module "s3" {
   source = "../../module/s3"
 
   general_config = var.general_config
-  bucket_role    = "alb-access-log"
-  iam_account_id = var.iam_account_id
+  index_document = var.index_document
 }
 
 ##DNS
@@ -61,6 +52,6 @@ module "cloudfront" {
   general_config      = var.general_config
   cf_cname            = var.cf_cname
   domain_name         = var.domain_name
-  alb_id              = module.alb.alb_id
+  bucket_id           = module.s3.bucket_id
   cert_cloudfront_arn = module.acm_cloudfront.cert_cloudfront_arn
 }
