@@ -1,6 +1,7 @@
 variable "general_config" {
   type = map(any)
 }
+variable "bucket_id" {}
 variable "cf_cname" {}
 variable "domain_name" {}
 variable "cert_cloudfront_arn" {}

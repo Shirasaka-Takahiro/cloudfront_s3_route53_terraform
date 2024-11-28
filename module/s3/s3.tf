@@ -1,9 +1,9 @@
 ##Default Bucket
 resource "aws_s3_bucket" "default_bucket" {
-  bucket = "${var.general_config["project"]}-${var.general_config["env"]}-${var.bucket_role}-bucket"
+  bucket = "${var.general_config["project"]}-${var.general_config["env"]}-bucket"
 
   tags = {
-    Name = "${var.general_config["project"]}-${var.general_config["env"]}-${var.bucket_role}-bucket"
+    Name = "${var.general_config["project"]}-${var.general_config["env"]}-bucket"
   }
 }
 
@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "iam_policy_default" {
     principals {
       type = "AWS"
       identifiers = [
-        aws_cloudfront_origin_access_identity.iam_policy_default.iam_arn
+        aws_cloudfront_origin_access_identity.default_identity.iam_arn
       ]
     }
   }
@@ -70,3 +70,5 @@ resource "aws_s3_bucket_policy" "bucket_policy_to_bucket_association" {
   bucket = aws_s3_bucket.default_bucket.id
   policy = data.aws_iam_policy_document.iam_policy_default.json
 }
+
+resource "aws_cloudfront_origin_access_identity" "default_identity" {}

@@ -26,7 +26,7 @@ module "naked_domain" {
   distribution_hosted_zone_id = module.cloudfront.distribution_hosted_zone_id
 }
 
-module "sub_dmain_1" {
+module "sub_domain_1" {
   source = "../../module/route53"
 
   zone_id                     = var.zone_id
