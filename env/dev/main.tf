@@ -12,7 +12,9 @@ module "s3" {
   source = "../../module/s3"
 
   general_config = var.general_config
+  bucket_role = var.bucket_role
   index_document = var.index_document
+  cloudfront_origin_access_identity_iam_arn = module.cloudfront.cloudfront_origin_access_identity_iam_arn
 }
 
 ##DNS
@@ -51,7 +53,8 @@ module "cloudfront" {
 
   general_config      = var.general_config
   cf_cname            = var.cf_cname
-  domain_name         = var.domain_name
+  #domain_name         = var.domain_name
+  bucket_regional_domain_name         = module.s3.bucket_regional_domain_name
   bucket_id           = module.s3.bucket_id
   cert_cloudfront_arn = module.acm_cloudfront.cert_cloudfront_arn
 }

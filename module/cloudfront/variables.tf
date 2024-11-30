@@ -3,5 +3,6 @@ variable "general_config" {
 }
 variable "bucket_id" {}
 variable "cf_cname" {}
-variable "domain_name" {}
+#variable "domain_name" {}
+variable "bucket_regional_domain_name" {}
 variable "cert_cloudfront_arn" {}

@@ -5,3 +5,7 @@ output "bucket_id" {
 output "bucket_domain_name" {
   value = aws_s3_bucket.default_bucket.bucket_domain_name
 }
+
+output "bucket_regional_domain_name" {
+  value = aws_s3_bucket.default_bucket.bucket_regional_domain_name
+}

@@ -49,6 +49,11 @@ variable "sans" {
 }
 
 ##S3
+variable "bucket_role" {
+  description = "Role name for S3 bucket"
+  type        = string
+}
+
 variable "index_document" {
   description = "Website index document"
   type        = string

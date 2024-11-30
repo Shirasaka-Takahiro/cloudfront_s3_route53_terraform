@@ -6,8 +6,14 @@ resource "aws_cloudfront_distribution" "default" {
   ]
 
   origin {
-    domain_name = var.domain_name
+    domain_name = var.bucket_regional_domain_name
     origin_id   = var.bucket_id
+
+    ##Access for S3
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.default_identity.cloudfront_access_identity_path
+    }
+
     custom_origin_config {
       http_port                = 80
       https_port               = 443
@@ -52,3 +58,5 @@ resource "aws_cloudfront_distribution" "default" {
 data "aws_cloudfront_origin_request_policy" "default" {
   name = "Managed-AllViewerAndCloudFrontHeaders-2022-06"
 }
+
+resource "aws_cloudfront_origin_access_identity" "default_identity" {}
