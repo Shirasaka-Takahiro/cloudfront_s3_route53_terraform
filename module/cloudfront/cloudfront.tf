@@ -9,11 +9,6 @@ resource "aws_cloudfront_distribution" "default" {
     domain_name = var.bucket_regional_domain_name
     origin_id   = var.bucket_id
 
-    ##Access for S3
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.default_identity.cloudfront_access_identity_path
-    }
-
     custom_origin_config {
       http_port                = 80
       https_port               = 443
@@ -52,11 +47,13 @@ resource "aws_cloudfront_distribution" "default" {
     max_ttl                  = 60
     origin_request_policy_id = data.aws_cloudfront_origin_request_policy.default.id
   }
+
+  depends_on = [
+    var.module_acm_cloudfront
+  ]
 }
 
 ## Managed Origin Request Policy
 data "aws_cloudfront_origin_request_policy" "default" {
   name = "Managed-AllViewerAndCloudFrontHeaders-2022-06"
 }
-
-resource "aws_cloudfront_origin_access_identity" "default_identity" {}

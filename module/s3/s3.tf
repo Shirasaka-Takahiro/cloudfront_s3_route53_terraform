@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "default_bucket" {
   bucket = "${var.general_config["project"]}-${var.general_config["env"]}-${var.bucket_role}-bucket"
 
   tags = {
-    Name = "${var.general_config["project"]}-${var.general_config["env"]}-bucket"
+    Name = "${var.general_config["project"]}-${var.general_config["env"]}-${var.bucket_role}-bucket"
   }
 }
 
@@ -53,15 +53,12 @@ data "aws_iam_policy_document" "iam_policy_default" {
   statement {
     effect = "Allow"
     actions = [
-      "s3:GetObject",
-      "s3:PutObject",
+      "s3:GetObject"
     ]
     resources = ["${aws_s3_bucket.default_bucket.arn}/*"]
     principals {
-      type = "AWS"
-      identifiers = [
-        var.cloudfront_origin_access_identity_iam_arn
-      ]
+      type = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
     }
   }
 }
