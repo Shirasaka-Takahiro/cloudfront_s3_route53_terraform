@@ -54,7 +54,7 @@ module "cloudfront" {
   cf_cname            = var.cf_cname
   #domain_name         = var.domain_name
   bucket_regional_domain_name         = module.s3.bucket_regional_domain_name
-  bucket_id           = module.s3.bucket_id
+  #bucket_id           = module.s3.bucket_id
   cert_cloudfront_arn = module.acm_cloudfront.cert_cloudfront_arn
   module_acm_cloudfront = module.acm_cloudfront
 }
