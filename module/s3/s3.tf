@@ -57,8 +57,13 @@ data "aws_iam_policy_document" "iam_policy_default" {
     ]
     resources = ["${aws_s3_bucket.default_bucket.arn}/*"]
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["cloudfront.amazonaws.com"]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceArn"
+      values   = [var.distribution_arn]
     }
   }
 }
@@ -67,4 +72,3 @@ resource "aws_s3_bucket_policy" "bucket_policy_to_bucket_association" {
   bucket = aws_s3_bucket.default_bucket.id
   policy = data.aws_iam_policy_document.iam_policy_default.json
 }
-
